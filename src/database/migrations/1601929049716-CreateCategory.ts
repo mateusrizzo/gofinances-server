@@ -5,7 +5,7 @@ export default class CreateCategory1601929049716 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<any> {
         await queryRunner.createTable(
             new Table({
-                name: 'category',
+                name: 'categories',
                 columns: [
                     {
                         name: 'id',
