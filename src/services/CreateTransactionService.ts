@@ -15,28 +15,29 @@ interface Request {
 class CreateTransactionService {
   public async execute({title, type, value, category}: Request): Promise<Transaction> {
     const transactionRepository = getCustomRepository(TransactionRepository);
-    // const categoryRepository = getRepository(Category);
-
-    // const findCategoryId = await categoryRepository.findOne({
-    //   where: {category}
-    // });
-
-    // if (!findCategoryId) {
-    //   const newCategory = await categoryRepository.create({
-    //     title: category
-    //   });
-    //   categoryRepository.save(newCategory);
-    // }
-
-    // const categoryId = await categoryRepository.find({
-    //   where: 
-    // })
-
+    const categoryRepository = getRepository(Category);
     const balance = await transactionRepository.getBalance();
 
     if(type === 'outcome' && value > balance.total) {
       throw new AppError('Insufficent funds for transaction');
     }
+
+    const findCategory = await categoryRepository.findOne({
+      where: {category}
+    });
+
+    if (!findCategory) {
+      const newCategory = await categoryRepository.create({
+        title: category
+      });
+      categoryRepository.save(newCategory);
+    }
+
+    const categoryId = await categoryRepository.find({
+      where: {title: category}
+    })
+
+    
 
     const transaction = transactionRepository.create({
       title,
