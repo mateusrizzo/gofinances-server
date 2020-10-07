@@ -34,11 +34,13 @@ transactionsRouter.post('/', async (request, response) => {
 });
 
 transactionsRouter.delete('/:id', async (request, response) => {
-  const {id} = request.query;
+  const {id} = request.params;
 
   const deleteTransaction = new DeleteTransactionService();
 
-  const transaction = await deleteTransaction.execute();
+  await deleteTransaction.execute(id);
+
+  return response.status(204).send();
 
 });
 
